@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const { dbConnection } = require('../database/config');
 
 class Server {
     constructor() {
@@ -7,11 +8,16 @@ class Server {
         this.port = process.env.PORT;
         this.resortPath = '/api/resort';
 
+        //conectar a database
+        this.connectDB();
         //middlewares
         this.middlewares();
-
         //routes
         this.routes();
+    }
+
+    async connectDB() {
+        await dbConnection();
     }
 
     middlewares() {
@@ -32,8 +38,6 @@ class Server {
             console.log('Servidor corriendo en puerto', this.port);
         });
     }
-
-
 }
 
 module.exports = Server;

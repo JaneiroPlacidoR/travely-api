@@ -1,43 +1,84 @@
 const { response, request } = require('express');
+const Resort = require('../models/resort');
 
-const resortGet = (req = request, res = response) => {
-    const { q, j = "no name" } = req.query;
+const resortsGet = async (req = request, res = response) => {
+
+    //way 1 - if one depend of other (more slowly because when one finish other begin)
+    // const resorts = await Resort.find({state:true});
+    // .limit(12)
+    // const total = await Resort.countDocuments({state:true});
+
+    //way 2 - if are indepents (more fast because work both)
+    const [total, resorts] = await Promise.all([
+        Resort.countDocuments({ state: true }),
+        Resort.find({ state: true })
+    ])
 
     res.json({
-        msg: 'get api - controlador',
-        q,
-        j
+        total,
+        resorts
     })
 }
 
-const resortPost = (req, res = response) => {
-    const body = req.body;
+const oneResortGet = async (req = request, res = response) => {
 
-    res.json({
-        msg: 'post api -controller',
-        body
-    })
-}
-
-const resortPut = (req, res = response) => {
-    const id = req.params.id;
-    res.json({
-        msg: 'put api -controller',
-        id
-    })
-}
-
-const resortDelete = (req, res = response) => {
     const id = req.params.id;
 
+    const resort = await Promise.all([
+        Resort.findById(id)
+    ])
+
     res.json({
-        msg: 'delete api',
-        id
+        resort
     })
 }
+
+const resortPost = async (req = request, res = response) => {
+
+    const { name, place, amountRooms, rate, rnc, state } = req.body;
+    const resort = new Resort({ name, place, amountRooms, rate, rnc, state });
+
+    const rncExist = await Resort.findOne({ rnc });
+
+    if (rncExist) {
+        return res.status(400).json({
+            message: 'This "Resort" is already registered'
+        });
+    }
+
+    await resort.save();
+    res.json({
+        resort
+    })
+}
+
+const resortPut = async (req = request, res = response) => {
+    const id = req.params.id;
+    const { _id, ...resto } = req.body;
+
+    const resort = await Resort.findByIdAndUpdate(id, resto);
+
+    res.json({
+        msg: 'Resort updated!',
+        resort
+    })
+}
+
+//changing state
+const resortDelete = async (req = request, res = response) => {
+    const id = req.params.id;
+    const resort = await Resort.findByIdAndUpdate(id, { state: false });
+
+    res.json({
+        msg: 'Resort deleted!',
+        resort
+    })
+}
+
 
 module.exports = {
-    resortGet,
+    resortsGet,
+    oneResortGet,
     resortPost,
     resortPut,
     resortDelete
