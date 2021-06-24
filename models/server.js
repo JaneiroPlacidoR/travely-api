@@ -30,7 +30,7 @@ class Server {
     }
 
     routes() {
-        this.app.use(this.resortPath, require('../routes/resort'));
+        this.app.use(this.resortPath, require('../routes/room'));
     }
 
     listen() {

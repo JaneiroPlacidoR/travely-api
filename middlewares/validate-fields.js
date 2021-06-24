@@ -1,23 +1,38 @@
 const { validationResult } = require('express-validator');
-const Resort = require('../models/resort');
+const Room = require('../models/room');
 
 const validateFields = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json(errors);
     }
-
     next();
 }
 
 const idExistValidate = async (id) => {
-    const idExist = await Resort.findById(id);
+    const idExist = await Room.findById(id);
     if (!idExist) {
         throw new Error(`The id is not exist ${id}`);
     }
 }
 
+const emailExistValidate = async (email) => {
+    const emailExist = await Room.findOne({ email });
+    if (emailExist) {
+        throw new Error(`Email already exist ${email}`);
+    }
+}
+
+const rncExistValidate = async (rnc) => {
+    const rncExist = await Room.findOne({ rnc });
+    if (rncExist) {
+        throw new Error(`RNC already exist ${rnc}`);
+    }
+}
+
 module.exports = {
     validateFields,
-    idExistValidate
+    idExistValidate,
+    emailExistValidate,
+    rncExistValidate
 }
