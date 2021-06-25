@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+var bodyParser = require('body-parser');
+
 const { dbConnection } = require('../database/config');
 
 class Server {
@@ -27,10 +29,15 @@ class Server {
         this.app.use(express.json());
         //directorio publico
         this.app.use(express.static('public'));
+        //bodyparser
+        this.app.use(bodyParser.json());
+        this.app.use(bodyParser.urlencoded({ extended: true })) // format the form data
     }
 
     routes() {
         this.app.use(this.resortPath, require('../routes/room'));
+        this.app.use(this.resortPath, require('../routes/resort'));
+
     }
 
     listen() {

@@ -1,5 +1,7 @@
 const { validationResult } = require('express-validator');
 const Room = require('../models/room');
+const Resort = require('../models/resort');
+
 
 const validateFields = (req, res, next) => {
     const errors = validationResult(req);
@@ -17,14 +19,14 @@ const idExistValidate = async (id) => {
 }
 
 const emailExistValidate = async (email) => {
-    const emailExist = await Room.findOne({ email });
+    const emailExist = await Resort.findOne({ email });
     if (emailExist) {
         throw new Error(`Email already exist ${email}`);
     }
 }
 
 const rncExistValidate = async (rnc) => {
-    const rncExist = await Room.findOne({ rnc });
+    const rncExist = await Resort.findOne({ rnc });
     if (rncExist) {
         throw new Error(`RNC already exist ${rnc}`);
     }

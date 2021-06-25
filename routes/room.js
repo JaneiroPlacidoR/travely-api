@@ -8,15 +8,14 @@ const {
     roomDelete
 } = require('../controller/room');
 const {
-    validateFields, idExistValidate,
-    emailExistValidate, rncExistValidate
+    validateFields, idExistValidate
 } = require('../middlewares/validate-fields');
 
 const router = Router();
 
-router.get('/', roomsGet);
+router.get('/room', roomsGet);
 
-router.get('/:id', [
+router.get('/room/:id', [
     //validation id is a mongo id
     check('id', '1-It is not a valid id').isMongoId(),
     //validation id mongo exist
@@ -24,17 +23,7 @@ router.get('/:id', [
     validateFields
 ], oneRoomGet);
 
-router.post('/', [
-    //validation if fields are not empty
-    check('name', 'Name is required').not().isEmpty(),
-    check('place', 'Place is required').not().isEmpty(),
-    check('amountRooms', 'amountRooms is required').not().isEmpty(),
-    check('rate', 'Rate is required').not().isEmpty(),
-    check('rnc', 'RNC is required').not().isEmpty(),
-    //validation what rnc field is 10 length
-    check('rnc', 'Invalid RNC').isLength({ min: 10, max: 10 }),
-    check('rnc').custom(rncExistValidate),
-    check('email').custom(emailExistValidate),
+router.post('/room', [
     //validation if fields are not empty
     check('nickname', 'Nickname is required').not().isEmpty(),
     check('typeRoom', 'Type is required').not().isEmpty(),
@@ -44,7 +33,7 @@ router.post('/', [
     validateFields
 ], roomPost);
 
-router.put('/:id', [
+router.put('/room/:id', [
     //validation id is a mongo id
     check('id', '2-It is not a valid id').isMongoId(),
     //validation id mongo exist
@@ -52,7 +41,7 @@ router.put('/:id', [
     validateFields
 ], roomPut);
 
-router.delete('/:id', [
+router.delete('/room/:id', [
     //validation id is a mongo id
     check('id', '3-It is not a valid id').isMongoId(),
     //validation id mongo exist

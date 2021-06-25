@@ -1,25 +1,21 @@
 const { response, request } = require('express');
 const Room = require('../models/room');
+const Resort = require('../models/resort');
 
 const roomsGet = async (req = request, res = response) => {
 
-    const [total, rooms] = await Promise.all([
-        Room.countDocuments({ state: true }),
-        Room.find({ state: true })
-    ])
-
-    res.json({
-        total,
-        rooms
+    Room.find({ state: true }, function (err, room) {
+        Resort.populate(room, { path: "resort" }, function (err, room) {
+            res.status(200).send(room);
+        });
     })
+
 }
 
 const oneRoomGet = async (req = request, res = response) => {
     const id = req.params.id;
 
-    const room = await Promise.all([
-        Room.findById(id)
-    ])
+    const room = await Room.findById(id)
 
     res.json({
         room
@@ -28,16 +24,14 @@ const oneRoomGet = async (req = request, res = response) => {
 
 const roomPost = async (req = request, res = response) => {
 
-    const { nickname, typeRoom, price, includes, noRoom, img
-        , name, place, amountRooms, rate, rnc, phone, email } = req.body;
+    const { nickname, typeRoom, price, includes, noRoom, img, resort } = req.body;
     const room = new Room({
-        nickname, typeRoom, price, includes, noRoom, img,
-        name, place, amountRooms, rate, rnc, phone, email
+        nickname, typeRoom, price, includes, noRoom, img, resort
     });
-    await room.save();
+    const newRoom = await room.save();
 
     res.json({
-        room
+        newRoom
     })
 
 }
