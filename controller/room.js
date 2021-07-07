@@ -14,12 +14,14 @@ const roomsGet = async (req = request, res = response) => {
 
 const oneRoomGet = async (req = request, res = response) => {
     const id = req.params.id;
-
-    const room = await Room.findById(id)
-
-    res.json({
-        room
+    
+    Room.findById(id, function (err, room) {
+        Resort.populate(room, { path: "resort" }, function (err, room) {
+            res.status(200).send(room);
+        });
     })
+
+   
 }
 
 const roomPost = async (req = request, res = response) => {
