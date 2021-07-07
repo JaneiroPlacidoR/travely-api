@@ -7,6 +7,13 @@ const resortSchema = new Schema({
         type: String,
         required: [true, 'Name is required']
     },
+    img: {
+        type: String,
+        required: [true, 'No. is required']
+    },
+    gallery:{
+        type: [String]
+    },
     place: {
         type: String,
         required: [true, 'Place is required']
@@ -31,7 +38,7 @@ const resortSchema = new Schema({
         type: String,
         required: [true, 'Email is required']
     },
-     state: {
+    state: {
         type: Boolean,
         default: true
     }

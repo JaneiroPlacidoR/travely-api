@@ -26,8 +26,8 @@ const oneResortGet = async (req = request, res = response) => {
 
 const resortPost = async (req = request, res = response) => {
 
-    const { name, place, amountRooms, rate, rnc, phone, email, state } = req.body;
-    const resort = new Resort({ name, place, amountRooms, rate, rnc, phone, email, state });
+    const { name, img, gallery, place, amountRooms, rate, rnc, phone, email, state } = req.body;
+    const resort = new Resort({ name, img, gallery, place, amountRooms, rate, rnc, phone, email, state });
     await resort.save();
 
     res.json({

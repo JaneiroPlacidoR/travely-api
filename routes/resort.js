@@ -22,6 +22,8 @@ router.get('/:id', oneResortGet);
 router.post('/', [
     //validation if fields are not empty
     check('name', 'Name is required').not().isEmpty(),
+    check('img', 'Img is required').not().isEmpty(),
+    // check('gallery', 'galery of images is required').not().isEmpty(),
     check('place', 'Place is required').not().isEmpty(),
     check('amountRooms', 'amountRooms is required').not().isEmpty(),
     check('rate', 'Rate is required').not().isEmpty(),
