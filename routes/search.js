@@ -1,11 +1,13 @@
 const { Router } = require('express');
 const {
-    searchRoom
+    searchRoom,
+    searchAll
 } = require('../controller/room');
 const router = Router();
 
 
 router.get('/search/:term/:adults/:children/:rooms', searchRoom);
+router.get('/search/:word/', searchAll);
 
 
 module.exports = router;
