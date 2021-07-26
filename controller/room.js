@@ -9,7 +9,6 @@ const roomsGet = async (req = request, res = response) => {
             res.status(200).send(room);
         });
     })
-
 }
 
 const oneRoomGet = async (req = request, res = response) => {
@@ -22,6 +21,102 @@ const oneRoomGet = async (req = request, res = response) => {
     })
 
    
+}
+
+const searchRoom = async  (req = request, res = response) => {
+
+    term = req.params.term;
+    let regex = new RegExp(term, 'i');
+
+    Resort.find({ place : regex})
+        .exec((err, resortLocalizado) => {
+            if (err) {
+                return res.status(500).json({
+                    ok: false,
+                    err
+                });
+            }
+            if (!resortLocalizado) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+
+            let resorts = [];
+
+            resortLocalizado.forEach(element => {
+            resorts.push(element._id);
+            });
+
+            if(resortLocalizado.length == 0){
+                return res.status(400).json({
+                    ok: false,
+                    err:"There is not coincidences"
+                });
+            }
+
+            //////////////////
+            adults = req.params.adults;
+            children = req.params.children;
+            rooms = req.params.rooms;
+
+
+            //couple room
+            if(adults == 2 && children == 0 && rooms == 1){
+                //validando que las habitaciones se encuentren en los 
+                //resorts del lugar ya introducido y que sean tipo couple
+                Room.find({typeRoom:"couple",resort:resorts})
+                .exec((err, room) => {
+                    if (err) {
+                        return res.status(500).json({
+                            ok: false,
+                            err
+                        });
+                    }
+
+                        res.status(200).json({
+                            ok: true,
+                            room
+                        });
+
+                    });
+
+                    //business room
+            }else if(adults == 1 && children == 0 && rooms == 1){
+                Room.find({typeRoom:"business",resort:resorts})
+                .exec((err, room) => {
+                    if (err) {
+                        return res.status(500).json({
+                            ok: false,
+                            err
+                        });
+                    }
+
+                        res.status(200).json({
+                            ok: true,
+                            room
+                        });
+
+                    });
+            }else{
+                Room.find({typeRoom:"family",resort:resorts})
+                .exec((err, room) => {
+                    if (err) {
+                        return res.status(500).json({
+                            ok: false,
+                            err
+                        });
+                    }
+
+                        res.status(200).json({
+                            ok: true,
+                            room
+                        });
+
+                    });
+            }
+        });
 }
 
 const roomPost = async (req = request, res = response) => {
@@ -64,7 +159,9 @@ const roomDelete = async (req = request, res = response) => {
 module.exports = {
     roomsGet,
     oneRoomGet,
+    searchRoom,
     roomPost,
     roomPut,
     roomDelete
 }
+

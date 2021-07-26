@@ -23,6 +23,7 @@ router.get('/room/:id', [
     validateFields
 ], oneRoomGet);
 
+
 router.post('/room', [
     //validation if fields are not empty
     check('nickname', 'Nickname is required').not().isEmpty(),
