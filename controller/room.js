@@ -62,7 +62,7 @@ const searchRoom = async (req = request, res = response) => {
             rooms = req.params.rooms;
 
 
-            //couple room
+            //Couple room
             if (adults == 2 && children == 0 && rooms == 1) {
                 //validando que las habitaciones se encuentren en los 
                 //resorts del lugar ya introducido y que sean tipo couple
@@ -84,7 +84,7 @@ const searchRoom = async (req = request, res = response) => {
                     });
                 })
 
-                //business room
+                //Business room
             } else if (adults == 1 && children == 0 && rooms == 1) {
                 Room.find({ typeRoom: "business", resort: resorts }, function (err, room) {
                     Resort.populate(room, { path: "resort" }, function (err, room) {
@@ -103,6 +103,27 @@ const searchRoom = async (req = request, res = response) => {
 
                     });
                 })
+                //If any people is introduced
+            } else if (rooms == 0 || (children + adults) == 0) {
+                
+                Room.find({resort: resorts }, function (err, room) {
+                    Resort.populate(room, { path: "resort" }, function (err, room) {
+
+                        if (err) {
+                            return res.status(500).json({
+                                ok: false,
+                                err
+                            });
+                        }
+
+                        res.status(200).json({
+                            ok: true,
+                            room
+                        });
+
+                    });
+                })
+                //Family rooms
             } else {
                 Room.find({ typeRoom: "family", resort: resorts }, function (err, room) {
                     Resort.populate(room, { path: "resort" }, function (err, room) {
