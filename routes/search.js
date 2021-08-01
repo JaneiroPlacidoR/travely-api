@@ -7,7 +7,7 @@ const router = Router();
 
 
 router.get('/search/:term/:adults/:children/:rooms', searchRoom);
-router.get('/search/:word/', searchAll);
+router.get('/find/:word', searchAll);
 
 
 module.exports = router;

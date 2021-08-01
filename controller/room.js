@@ -36,12 +36,7 @@ const searchRoom = async (req = request, res = response) => {
                     err
                 });
             }
-            if (!resortLocalizado) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
-            }
+            
 
             let resorts = [];
 
