@@ -45,17 +45,17 @@ const searchRoom = async (req = request, res = response) => {
             });
 
             if (resortLocalizado.length == 0) {
-                return res.status(400).json({
-                    ok: false,
+                return res.status(200).json({
+                    ok: true,
                     err: "There is not coincidences"
                 });
             }
 
             //////////////////
-            adults = req.params.adults;
-            children = req.params.children;
-            rooms = req.params.rooms;
-
+            let adults = req.params.adults;
+            let children = req.params.children;
+            let rooms = req.params.rooms;
+        
 
             //Couple room
             if (adults == 2 && children == 0 && rooms == 1) {
