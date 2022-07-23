@@ -41,6 +41,12 @@ const resortSchema = new Schema({
     state: {
         type: Boolean,
         default: true
+    },
+    allservices:{
+        type: [String]
+    }, 
+    description:{
+        type: String
     }
 
 });
