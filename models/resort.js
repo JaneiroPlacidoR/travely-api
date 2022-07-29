@@ -47,6 +47,9 @@ const resortSchema = new Schema({
     }, 
     description:{
         type: String
+    },
+    mapLocation:{
+        type: String
     }
 
 });
